@@ -67,6 +67,7 @@ function updateGame() {
         scoreElement.textContent = score;
         generateFood();
         speed += 0.5; // Zwiększanie prędkości
+        snake.push({x: snake[snake.length - 1].x, y: snake[snake.length - 1].y});
     } else {
         snake.pop();
     }
@@ -261,7 +262,7 @@ document.addEventListener('keydown', (event) => {
             }
             break;
         case ' ':
-            paused = !paused; // Przełączanie stanu pauzy
+            paused =!paused; // Przełączanie stanu pauzy
             break;
     }
 });
