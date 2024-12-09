@@ -80,7 +80,9 @@ function updateGame() {
     }
 
     // Odmierzanie czasu gry
-    czasGry--;
+    if (czasGry > 0) {
+        czasGry--;
+    }
     timeElement.textContent = czasGry;
     if (czasGry <= 0) {
         resetGame();
