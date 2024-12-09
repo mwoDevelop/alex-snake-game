@@ -9,7 +9,7 @@ canvas.height = 1000;
 const gridSize = 20;
 const tileCount = canvas.width / gridSize;
 let speed = 7;
-let paused = false; // Dodanie zmiennej paused
+let paused = true; // Dodanie zmiennej paused
 let czasGry = 1200; // Czas gry w sekundach (20 minut)
 
 // Wąż
