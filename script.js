@@ -1,7 +1,7 @@
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreElement = document.getElementById('scoreValue');
-const timeElement = document.getElementById('timeValue');
+//const timeElement = document.getElementById('timeValue');
 
 // Ustawienia gry
 canvas.width = 1000;
@@ -10,7 +10,8 @@ const gridSize = 20;
 const tileCount = canvas.width / gridSize;
 let speed = 7;
 let paused = true; // Dodanie zmiennej paused
-let czasGry = 1200; // Czas gry w sekundach (20 minut)
+let lastScore = 0;
+let gameStarted = false;
 
 // Wąż
 let snake = [
@@ -28,7 +29,8 @@ let foodY = Math.floor(Math.random() * tileCount);
 // Punktacja
 let score = 0;
 
-// Czas gry
+// Tabela rankingowa
+let ranking = [];
 
 // Główna pętla gry
 function gameLoop() {
@@ -67,7 +69,9 @@ function updateGame() {
         scoreElement.textContent = score;
         generateFood();
         speed += 0.5; // Zwiększanie prędkości
-        snake.push({x: snake[snake.length - 1].x, y: snake[snake.length - 1].y});
+        for (let i = 0; i < 30; i++) {
+            snake.push({x: snake[snake.length - 1].x, y: snake[snake.length - 1].y});
+        }
     } else {
         snake.pop();
     }
@@ -75,18 +79,9 @@ function updateGame() {
     // Sprawdzanie kolizji z własnym ciałem
     for (let i = 1; i < snake.length; i++) {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
+            lastScore = score;
             resetGame();
         }
-    }
-
-    // Odmierzanie czasu gry
-    if (czasGry > 0) {
-        czasGry--;
-    }
-    timeElement.textContent = czasGry;
-    if (czasGry <= 0) {
-        resetGame();
-        alert("Czas gry minął!");
     }
 }
 
@@ -222,6 +217,14 @@ function generateFood() {
 
 // Reset gry
 function resetGame() {
+    if (gameStarted) {
+        score = 0;
+    } else {
+        gameStarted = true;
+    }
+    if (lastScore!== 0) {
+        addScoreToRanking();
+    }
     snake = [
         { x: 10, y: 10 },
         { x: 9, y: 10 },
@@ -229,11 +232,29 @@ function resetGame() {
     ];
     dx = 0;
     dy = 0;
-    score = 0;
     speed = 7;
-    scoreElement.textContent = score;
-    timeElement.textContent = czasGry;
+    scoreElement.textContent = lastScore;
     generateFood();
+}
+
+// Dodawanie wyniku do rankingu
+function addScoreToRanking() {
+    let name = prompt("Podaj swoje imię:");
+    ranking.push({name: name, score: lastScore});
+    ranking.sort((a, b) => b.score - a.score);
+    if (ranking.length > 10) {
+        ranking.pop();
+    }
+    displayRanking();
+}
+
+// Wyświetlanie rankingu
+function displayRanking() {
+    let rankingHtml = "";
+    for (let i = 0; i < ranking.length; i++) {
+        rankingHtml += `${i+1}. ${ranking[i].name} - ${ranking[i].score}<br>`;
+    }
+    document.getElementById("ranking").innerHTML = rankingHtml;
 }
 
 // Obsługa sterowania
