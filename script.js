@@ -89,6 +89,7 @@ function updateGame() {
         if (botSnake[i].x === snake[0].x && botSnake[i].y === snake[0].y) {
             lastScore = score;
             resetGame();
+            resetBotSnake(); // Resetowanie bota po kolizji
         }
     }
 }

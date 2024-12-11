@@ -98,13 +98,17 @@ function updateBotSnake() {
     }
 }
 
+// Początkowa pozycja i długość bota
+const initialBotSnake = [
+    {x: 5, y: 5},
+    {x: 4, y: 5},
+    {x: 3, y: 5}
+];
+
 // Resetowanie pozycji bota
 function resetBotSnake() {
-    botSnake = [
-        {x: 5, y: 5},
-        {x: 4, y: 5},
-        {x: 3, y: 5}
-    ];
+    // Kopiowanie początkowej pozycji i długości do botSnake
+    botSnake = initialBotSnake.map(segment => ({ ...segment }));
     botDx = 1;
     botDy = 0;
 }
