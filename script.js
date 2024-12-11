@@ -237,6 +237,20 @@ function resetGame() {
     generateFood();
 }
 
+// Funkcja do zapisywania rankingu w localStorage
+function saveRanking() {
+    localStorage.setItem('snakeGameRanking', JSON.stringify(ranking));
+}
+
+// Funkcja do ładowania rankingu z localStorage
+function loadRanking() {
+    const savedRanking = localStorage.getItem('snakeGameRanking');
+    if (savedRanking) {
+        ranking = JSON.parse(savedRanking);
+        displayRanking();
+    }
+}
+
 // Dodawanie wyniku do rankingu
 function addScoreToRanking() {
     let name = prompt("Podaj swoje imię:");
@@ -246,6 +260,7 @@ function addScoreToRanking() {
         ranking.pop();
     }
     displayRanking();
+    saveRanking(); // Zapisz ranking po dodaniu nowego wyniku
 }
 
 // Wyświetlanie rankingu
@@ -261,34 +276,35 @@ function displayRanking() {
 document.addEventListener('keydown', (event) => {
     switch (event.key) {
         case 'ArrowUp':
-            if (dy!== 1) { // Zapobieganie zawracaniu
+            if (dy !== 1) { // Zapobieganie zawracaniu
                 dx = 0;
                 dy = -1;
             }
             break;
         case 'ArrowDown':
-            if (dy!== -1) {
+            if (dy !== -1) {
                 dx = 0;
                 dy = 1;
             }
             break;
         case 'ArrowLeft':
-            if (dx!== 1) {
+            if (dx !== 1) {
                 dx = -1;
                 dy = 0;
             }
             break;
         case 'ArrowRight':
-            if (dx!== -1) {
+            if (dx !== -1) {
                 dx = 1;
                 dy = 0;
             }
             break;
         case ' ':
-            paused =!paused; // Przełączanie stanu pauzy
+            paused = !paused; // Przełączanie stanu pauzy
             break;
     }
 });
 
 // Rozpoczęcie gry
+loadRanking();
 gameLoop();
