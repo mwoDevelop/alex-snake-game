@@ -83,6 +83,14 @@ function updateGame() {
             resetGame();
         }
     }
+
+    // Sprawdzanie kolizji z wężem bota
+    for (let i = 0; i < botSnake.length; i++) {
+        if (botSnake[i].x === snake[0].x && botSnake[i].y === snake[0].y) {
+            lastScore = score;
+            resetGame();
+        }
+    }
 }
 
 // Rysowanie gry
