@@ -7,21 +7,50 @@ let botSnake = [
 let botDx = 1;
 let botDy = 0;
 
+// Funkcja sprawdzająca, czy dany punkt jest wolny
+function isFree(x, y) {
+    // Sprawdzanie kolizji z ciałem bota
+    for (let segment of botSnake) {
+        if (segment.x === x && segment.y === y) {
+            return false;
+        }
+    }
+    // Sprawdzanie kolizji z ciałem gracza
+    for (let segment of snake) {
+        if (segment.x === x && segment.y === y) {
+            return false;
+        }
+    }
+    return true;
+}
+
 // Aktualizacja stanu bota
 function updateBotSnake() {
-    // Prosty algorytm do poruszania się w kierunku jedzenia
-    if (botSnake[0].x < foodX) {
-        botDx = 1;
-        botDy = 0;
-    } else if (botSnake[0].x > foodX) {
-        botDx = -1;
-        botDy = 0;
-    } else if (botSnake[0].y < foodY) {
-        botDx = 0;
-        botDy = 1;
-    } else if (botSnake[0].y > foodY) {
-        botDx = 0;
-        botDy = -1;
+    let potentialMoves = [
+        { x: botSnake[0].x + 1, y: botSnake[0].y, dx: 1, dy: 0 }, // Prawo
+        { x: botSnake[0].x - 1, y: botSnake[0].y, dx: -1, dy: 0 }, // Lewo
+        { x: botSnake[0].x, y: botSnake[0].y + 1, dx: 0, dy: 1 }, // Dół
+        { x: botSnake[0].x, y: botSnake[0].y - 1, dx: 0, dy: -1 }  // Góra
+    ];
+
+    // Filtruj ruchy, które są wolne
+    potentialMoves = potentialMoves.filter(move => isFree(move.x, move.y));
+
+    // Wybierz ruch, który zbliża bota do jedzenia
+    let bestMove = potentialMoves[0];
+    let minDistance = Infinity;
+
+    for (let move of potentialMoves) {
+        let distance = Math.abs(move.x - foodX) + Math.abs(move.y - foodY);
+        if (distance < minDistance) {
+            minDistance = distance;
+            bestMove = move;
+        }
+    }
+
+    if (bestMove) {
+        botDx = bestMove.dx;
+        botDy = bestMove.dy;
     }
 
     let newHeadX = botSnake[0].x + botDx;
