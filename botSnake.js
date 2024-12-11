@@ -53,6 +53,31 @@ function updateBotSnake() {
     } else {
         botSnake.pop();
     }
+
+    // Sprawdzanie kolizji bota z samym sobą
+    for (let i = 1; i < botSnake.length; i++) {
+        if (botSnake[i].x === botSnake[0].x && botSnake[i].y === botSnake[0].y) {
+            resetBotSnake();
+        }
+    }
+
+    // Sprawdzanie kolizji bota z wężem gracza
+    for (let i = 0; i < snake.length; i++) {
+        if (snake[i].x === botSnake[0].x && snake[i].y === botSnake[0].y) {
+            resetBotSnake();
+        }
+    }
+}
+
+// Resetowanie pozycji bota
+function resetBotSnake() {
+    botSnake = [
+        {x: 5, y: 5},
+        {x: 4, y: 5},
+        {x: 3, y: 5}
+    ];
+    botDx = 1;
+    botDy = 0;
 }
 
 // Rysowanie bota
