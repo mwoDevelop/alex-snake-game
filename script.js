@@ -81,6 +81,7 @@ function updateGame() {
         if (snake[i].x === snake[0].x && snake[i].y === snake[0].y) {
             lastScore = score;
             resetGame();
+            resetBotSnake(); // Dodaj to wywołanie, aby zresetować bota
         }
     }
 
